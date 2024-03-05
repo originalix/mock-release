@@ -1,0 +1,58 @@
+name: release-desktop-mas
+
+on:
+  workflow_run:
+    workflows:
+      - daily-build
+    types:
+      - completed
+  workflow_dispatch:
+
+jobs:
+  release-ext:
+    runs-on: ubuntu-latest
+    if: ${{ !github.event.workflow_run || (github.event.workflow_run && github.event.workflow_run.conclusion == 'success') }}
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          lfs: true
+
+      - name: Setup ENV BUILD_NUMBER to 1
+        if: ${{ !github.event.workflow_run }}
+        run: |
+          # Generate build number ------- start
+          echo "BUILD_NUMBER=1" >> $GITHUB_ENV
+          # Generate build number ------- end
+  
+      - name: Setup ENV BUILD_NUMBER by workflow_run
+        if: ${{ github.event.workflow_run }}
+        run: |
+          echo "ActionTriggerBy = ${{ github.event.action }} / ${{ github.event_name }}"
+
+          # Generate build number ------- start
+          DATE=`date "+%Y%m%d"`
+          run_number=$(($workflow_run_number % 100))
+          run_number=$(printf "%02d" $run_number)
+          build_number="${DATE}${run_number}"
+          echo '$build_number='$build_number
+          echo "BUILD_NUMBER=$build_number" >> $GITHUB_ENV
+          # Generate build number ------- end
+
+        env:
+          workflow_run_number: ${{ github.event.workflow_run.run_number}}
+
+      - name: Update Build Version
+        run: |
+          CURRENT_TIME=$(date '+%Y-%m-%d %H:%M:%S')
+          echo "Mock Release Extension: BUILD_NUMBER=${{ env.BUILD_NUMBER }}"
+  
+      - name: 'Notify to Slack'
+        uses: originalix/cloudflare-worker-notify-action@main
+        with:
+          web-hook-url: ${{ secrets.CLOUDFLARE_WORKER_WEBHOOK_URL }}
+          artifact-type: Desktop-MAS 
+          artifact-name: OneKey-Desktop-MAS-RN
+          artifact-bundle-id: 'so.onekey.wallet.desktop-mas'
+          artifact-version-name: '5.0.0'
+          artifact-version-code: '${{ env.BUILD_NUMBER }}'
+          artifact-download-url: 'https://github.com'

@@ -48,5 +48,5 @@ jobs:
       - name: Update Build Version
         run: |
           CURRENT_TIME=$(date '+%Y-%m-%d %H:%M:%S')
-          echo "Mock Release Android: BUILD_NUMBER=${{ env.BUILE_NUMBER }}"
+          echo "Mock Release Android: BUILD_NUMBER=${{ env.BUILD_NUMBER }}"
   

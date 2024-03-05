@@ -68,5 +68,6 @@ jobs:
           echo '${{ needs.get-commit-id.outputs.upstream_id }}' > ./build_version
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
+          git add ./build_version
           git commit -am "build ${{ needs.get-commit-id.outputs.upstream_id }} in $CURRENT_TIME"
           git push --set-upstream origin buildhistory

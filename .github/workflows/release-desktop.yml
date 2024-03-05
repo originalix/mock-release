@@ -48,7 +48,8 @@ jobs:
 
       - name: Mock sleep 5 seconds
         run: |
-					sleep 5
+          CURRENT_TIME=$(date '+%Y-%m-%d %H:%M:%S')
+          echo "Mock Release Desktop: BUILD_NUMBER=${{ env.BUILD_NUMBER }}"
 
       - name: 'Notify to Slack'
         uses: originalix/cloudflare-worker-notify-action@main

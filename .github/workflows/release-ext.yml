@@ -50,6 +50,7 @@ jobs:
         uses: originalix/actions/cloudflare-worker-webhooks@main
         with:
           web-hook-url: ${{ secrets.CLOUDFLARE_WORKER_WEBHOOK_URL }}
+          secret-key: ${{ secrets.ACTION_SIGN_SECERT_KEY }}
           artifact-type: Extension
           artifact-name: OneKey-Extension-RN
           artifact-bundle-id: 'so.onekey.wallet.extension'

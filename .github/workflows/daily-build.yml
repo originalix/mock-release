@@ -27,7 +27,7 @@ jobs:
       - name: Clone Main Branch
         uses: actions/checkout@v3
         with:
-          ref: main
+          ref: release
           path: mock-release
       
       - name: Get Upstream Version

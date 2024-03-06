@@ -24,19 +24,6 @@ jobs:
           echo "current_id=$(sed -n 1p ./build_version)" >> $GITHUB_OUTPUT
           echo "current_id: $(sed -n 1p ./build_version)"
 
-      - name: Clone Main Branch
-        uses: actions/checkout@v3
-        with:
-          ref: main 
-          path: mock-release
-      
-      - name: Get Upstream Version
-        id: upstream_id
-        run: |
-          cd mock-release 
-          echo "upstream_id=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
-          echo "upstream_id: $(git rev-parse --short HEAD)"
-
   daily-build:
     runs-on: ubuntu-latest
     needs: get-commit-id
@@ -45,9 +32,6 @@ jobs:
         node-version: [20.x]
 
     steps:
-      - name: Check condition
-        run: if [ "${{ github.event_name }}" = "schedule" ] && [ "${{ needs.get-commit-id.outputs.current_id }}" = "${{ needs.get-commit-id.outputs.upstream_id }}" ]; then exit 1; fi
-
       - name: 'Setup ENV'
         run: |
           DATE=`date "+%Y%m%d"`

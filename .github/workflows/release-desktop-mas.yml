@@ -47,7 +47,7 @@ jobs:
           echo "Mock Release Extension: BUILD_NUMBER=${{ env.BUILD_NUMBER }}"
   
       - name: 'Notify to Slack'
-        uses: originalix/actions/cloudflare-worker-webhooks@main
+        uses: onekeyhq/actions/slack-notify-webhook@main
         with:
           web-hook-url: ${{ secrets.CLOUDFLARE_WORKER_WEBHOOK_URL }}
           secret-key: ${{ secrets.ACTION_SIGN_SECERT_KEY }}

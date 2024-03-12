@@ -1,11 +1,11 @@
 name: release-ext
 
 on:
-  workflow_run:
-    workflows:
-      - daily-build
-    types:
-      - completed
+  # workflow_run:
+  #   workflows:
+  #     - daily-build
+  #   types:
+  #     - completed
   workflow_dispatch:
 
 jobs:
